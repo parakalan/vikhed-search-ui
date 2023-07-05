@@ -7,33 +7,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Vikhed Search">
     <title>Vikhed Search</title>
-    <link rel="stylesheet" href="https://vikhed.in/search/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div  id="search-banner" style="text-align: center;">
-        <img  src="https://vikhed.in/search/assets/vikhed-search.jpg">
+        <img style="border-radius: 20px;" src="assets/equity-khoj.jpg">
     </div>
     <div class="hero">
         <div class="searchBox">
-            <img  src="https://vikhed.in/search/assets/vikhed-logo.jpg" id="vikhed-img">
-            <input type="search" placeholder="Search company, financial results, insider trades" id="input">
-            <!-- <img src="Img/mic.png" alt="" id="mic"> -->
+            <!-- <img  src="https://vikhed.in/search/assets/vikhed-logo.jpg" id="vikhed-img"> -->
+            <input type="search" placeholder="Search company, financial results, insider trades, transcripts and more" id="query">
+            <span style="font-size: 1.5em; padding-left: 2%; cursor: pointer;" onclick="submitDetails()">🔍</span>
         </div>
     </div>
-    <div style="height: 0" class="hero"><a href="#">Try asking: How many insiders bought Aditya Birla Capital?</a></div>
+    <div id="results"></div>
+
+    <script type="text/javascript" src="https://vikhed.in/vendor/jquery/jquery-3.2.1.min.js"></script>
 
     <script type="text/javascript">
-        // function showDetails() {
-        //     var a = document.getElementById('sea');
-        //     window.location = 'https://www.google.com/search?q=' + a;
-        // }
-        // let input = document.getElementById('input');
-        // if(window.innerWidth < 430){
-        // input.setAttribute('placeholder', 'Search')
-        // }
-        // console.log(window.innerWidth)
-
-    </script>
+        // var API_BASE_URL = "https://vikhed.in/api/"
+        var API_BASE_URL = "http://127.0.0.1:2100/api/"
+        function submitDetails() {
+            $.ajax({
+              type: "POST",
+              url: API_BASE_URL + "search",
+              data: JSON.stringify({query: $('#query').val()}),
+              contentType: "application/json",
+              encode: true,
+            }).done(function (data) {
+                console.log(data)
+                if(data.status == 200) {
+                    console.log(data.response)
+                    $("#results").html(data.response[0].content)
+                }
+            });
+         }
+      </script>
 </body>
 
 </html>
