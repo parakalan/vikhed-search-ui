@@ -20,7 +20,7 @@
             <span style="font-size: 1.5em; padding-left: 2%; cursor: pointer;" onclick="submitDetails()">🔍</span>
         </div>
     </div>
-    <div id="results"></div>
+    <div id="results"><div style="display: none;" class="lds-ripple"><div></div><div></div></div></div>
 
     <script type="text/javascript" src="https://vikhed.in/vendor/jquery/jquery-3.2.1.min.js"></script>
 
@@ -28,6 +28,7 @@
         var API_BASE_URL = "https://vikhed.in/api/"
         // var API_BASE_URL = "http://127.0.0.1:2100/api/"
         function submitDetails() {
+            $(".lds-ripple").show();
             $.ajax({
               type: "POST",
               url: API_BASE_URL + "search",
@@ -39,6 +40,7 @@
                 if(data.status == 200) {
                     console.log(data.response)
                     $("#results").html(data.response[0].content)
+                    $(".lds-ripple").hide();
                 }
             });
          }
