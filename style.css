@@ -5,6 +5,7 @@
 
 body {
     background-color: #f0f3ff;
+    font-family: 'Google Sans';
 }
 
 /* latin-ext */
@@ -185,4 +186,28 @@ body {
     height: 72px;
     opacity: 0;
   }
+}
+
+table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+
+.buy {
+    color: green;
+}
+
+.sell {
+    color: red;
+}
+
+table, th, td {
+  border: 1px solid black;
 }

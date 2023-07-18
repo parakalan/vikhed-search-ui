@@ -6,20 +6,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Vikhed Search">
-    <title>Equity Khoj | Search engine for the market</title>
+    <title>Equity Khoj | Insider Search</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div  id="search-banner" style="text-align: center;">
-        <img style="border-radius: 20px;" src="assets/equity-khoj.jpg">
+        <!-- <img style="border-radius: 20px;" src="assets/equity-khoj.jpg"> -->
+        <h1>Insider Trades</h1>
+        <br>
+        <!-- <h4 style="font-family: 'Google Sans';">Search Insider trading information filed with NSE</h4> -->
     </div>
-    <div class="hero">
-        <div class="searchBox">
-            <!-- <img  src="https://vikhed.in/search/assets/vikhed-logo.jpg" id="vikhed-img"> -->
-            <input type="search" placeholder="Search company, financial results, insider trades, transcripts and more" id="query">
+    <!-- <div class="hero">
+            <div class="searchBox">
+            <input type="search" placeholder="Enter ticker symbol" id="query">
             <span style="font-size: 1.5em; padding-left: 2%; cursor: pointer;" onclick="submitDetails()">🔍</span>
         </div>
-    </div>
+    </div> -->
+    <table id="insider_table">
+    <tr>
+      <th>Symbol</th>
+      <th>Company</th>
+      <th>Acquirer Name</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+      <th>Security Type</th>
+      <th>No. of shares</th>
+      <th>Amount</th>
+      <th>Person Category</th>
+    </tr>
+
+  </table>
     <div id="results"><div style="display: none;" class="lds-ripple"><div></div><div></div></div></div>
 
     <script type="text/javascript" src="https://vikhed.in/vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -31,19 +47,38 @@
             $(".lds-ripple").show();
             $.ajax({
               type: "POST",
-              url: API_BASE_URL + "search",
-              data: JSON.stringify({query: $('#query').val()}),
+              url: API_BASE_URL + "insider_trades/latest/symbol",
+              data: JSON.stringify({symbol: $('#query').val()}),
               contentType: "application/json",
               encode: true,
             }).done(function (data) {
-                console.log(data)
                 if(data.status == 200) {
-                    console.log(data.response)
-                    $("#results").html(data.response[0].content)
+                    console.log(data)
+                    for(var i=0; i < data.summary.length; i++) {
+                     $("#results").html(data.summary[i])
+                    }
                     $(".lds-ripple").hide();
                 }
             });
          }
+
+         function populateLatest() {
+             $.ajax({
+              type: "POST",
+              url: API_BASE_URL + "insider_trades/latest",
+              data: JSON.stringify({symbol: $('#query').val()}),
+              contentType: "application/json",
+              encode: true,
+            }).done(function (data) {
+                if(data.status == 200) {
+                    for(var i=0; i < data.table_data.length; i++) {
+                        console.log(data.table_data[i]);
+                        $('#insider_table').append(`<tr class='${data.table_data[i].tdpTransactionType.toLowerCase()}'> <td>${data.table_data[i].symbol}</td> <td>${data.table_data[i].company}</td> <td>${data.table_data[i].acqName}</td> <td>${data.table_data[i].date}</td> <td>${data.table_data[i].tdpTransactionType}</td> <td>${data.table_data[i].secType}</td> <td>${data.table_data[i].secAcq}</td> <td>${data.table_data[i].secVal}</td> <td>${data.table_data[i].personCategory}</td> </tr>`)
+                    }
+                }
+            });
+         }
+         populateLatest();
       </script>
 </body>
 
