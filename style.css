@@ -190,7 +190,8 @@ body {
 
 table {
       border-collapse: collapse;
-      width: 100%;
+      width: 80%;
+      margin: auto;
     }
     th, td {
       padding: 8px;
@@ -211,3 +212,19 @@ table {
 table, th, td {
   border: 1px solid black;
 }
+
+.filters {
+    width: 70%;
+    margin-left: 25%;
+    padding-bottom: 20px;
+}
+
+.filters > input,select {
+    font-family: 'Google Sans';
+    padding: 10px;
+    font-size: 1.2em;
+    display: inline-flex;
+    width: 25%;
+}
+
+.filters > select:invalid { color: gray; }
