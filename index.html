@@ -91,6 +91,23 @@
             var API_BASE_URL = "https://vikhed.in/api/";
             // var API_BASE_URL = "http://127.0.0.1:2100/api/"
 
+            function log(type, log) {
+                $.ajax({
+                    type: "POST",
+                    url: API_BASE_URL + "log",
+                    data: JSON.stringify({
+                        filters: {
+                            'type': type,
+                            'log': log,
+                        },
+                    }),
+                    contentType: "application/json",
+                    encode: true,
+                }).done(function (data) {
+                    console.log(data)
+                });
+            }
+
             function search() {
                 $.ajax({
                     type: "POST",
@@ -157,6 +174,9 @@
                 if ($("#tdpTransactionType").val() != null) {
                     fileName = fileName + "_" + $("#tdpTransactionType").val();
                 }
+
+                log("INSIDER_EXPORT",
+                    "Insider export generated for symbol = " + $("#symbol").val() + " and transactionType = " + $("#tdpTransactionType").val())
                 fileName = fileName + ".xlsx";
                 // Check if the 'xlsx' library is available
                 if (typeof XLSX === "undefined") {
