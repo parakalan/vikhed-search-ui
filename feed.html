@@ -1,0 +1,171 @@
+<html>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Google+Sans:400,500' rel='stylesheet'>
+		<!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-5PTLQQ13JE"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", "G-5PTLQQ13JE");
+        </script>
+		<style>
+			body {
+			    background-color: #f4f6f9;
+			     overflow: hidden;
+			}
+			 .pane {
+			     width: 33.33%;
+			     height: 100vh;
+			     float: left;
+			     box-sizing: border-box;
+			     border: 1px solid #ccc;
+			     padding: 10px;
+			     background-color: #fff;
+			     display: flex;
+			     flex-direction: column;
+			     overflow: hidden;
+			}
+			 h1 {
+			    margin: 0;
+			     padding: 10px;
+			     font-family: 'Google Sans', sans-serif;
+			     background-color: #222;
+			     color: #fff;
+			}
+			 h2, p {
+			    margin: 0;
+			}
+			 .card {
+			    background-color: #fff;
+			     padding: 10px;
+			     margin-bottom: 10px;
+			     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+			}
+			 .card h3 {
+			    margin-top: 0;
+			     font-family: 'Google Sans', sans-serif;
+			}
+			 .card p {
+			    margin-bottom: 0;
+			     font-family: 'Google Sans', sans-serif;
+			}
+			 h2 {
+			    margin-bottom: 10px;
+			     font-family: 'Google Sans', sans-serif;
+			     border-bottom: 1px solid #ccc;
+			     padding-bottom: 5px;
+			}
+			
+			.share-button {
+			    background-color: #ccc;
+			     border: 0;
+			     padding: 5px 10px;
+			     color: #fff;
+			     font-family: 'Google Sans', sans-serif;
+			     cursor: pointer;
+			}
+			
+			.card:hover {
+			    background-color: lightblue;
+			}
+
+			.cards {
+				overflow-y: scroll;
+			}
+
+			.paneTitle {
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Equitykhoj Feed</h1>
+		<div class='pane'>
+			<h2 class="paneTitle">Insider Trades</h2>
+			<div id="insiderTrades" class="cards"></div>
+		</div>
+		<div class='pane'>
+			<h2 class="paneTitle">News</h2>
+			<div id="news" class="cards"></div>
+		</div>
+		<div class='pane'>
+			<h2 class="paneTitle">Financial Results</h2>
+			<div id="financials" class='cards'></div>
+		</div>
+	</body>
+	<script>
+		let insiderTradesPane = document.getElementById('insiderTrades');
+		let newsPane = document.getElementById('news');
+		let financialsPane = document.getElementById('financials');
+
+		function addInsiderTradeCard(title, info) {
+			insiderTradesPane.innerHTML = insiderTradesPane.innerHTML +  "<div class='card'><h3>" + title + "</h3><p>" + info + "</p></div>"
+		}
+		function getInsiderTrades() {
+		  // API call
+		  fetch('https://vikhed.in/api/insider_trades/latest', {
+		      method: 'POST'
+		  })
+		  .then(response => response.json())
+		  .then(data => {
+		    let tableData = data.table_data;
+		    tableData.forEach((m) => {
+		    	addInsiderTradeCard(m.company, m.summary)
+		    });
+		  })
+		  .catch(error => {
+		      console.error("Error sending message:", error);
+		  });
+		}
+		getInsiderTrades();
+
+
+		function addNewsCard(title, info, link) {
+			newsPane.innerHTML = newsPane.innerHTML +  "<div style='cursor: pointer;' onclick=\"window.open('" + link + "','mywindow');\" class='card'><h3>" + title + "</h3><p>" + info.replace(/<img[^>]*>/g,"") + "</p></div>"
+		}
+		function getNewsTrades() {
+		  // API call
+		  fetch('https://vikhed.in/api/news/latest', {
+		      method: 'POST'
+		  })
+		  .then(response => response.json())
+		  .then(data => {
+		    let tableData = data.table_data;
+		    tableData.forEach((m) => {
+		    	addNewsCard(m.title, m.description, m.link)
+		    });
+		  })
+		  .catch(error => {
+		      console.error("Error sending message:", error);
+		  });
+		}
+		getNewsTrades();
+
+
+		function addFinancialsCard(title, info) {
+			financialsPane.innerHTML = financialsPane.innerHTML +  "<div style='cursor: pointer;' class='card'><h3>" + title + "</h3><p>" + info + "</p></div>"
+		}
+		function getFinancials() {
+		  // API call
+		  fetch('http://localhost:2100/api/financials/latest', {
+		      method: 'POST'
+		  })
+		  .then(response => response.json())
+		  .then(data => {
+		    let tableData = data.table_data;
+		    tableData.forEach((m) => {
+		    	addFinancialsCard(m.company, m.summary)
+		    });
+		  })
+		  .catch(error => {
+		      console.error("Error sending message:", error);
+		  });
+		}
+		getFinancials();
+
+	</script>
+</html>
