@@ -80,6 +80,25 @@
 			.paneTitle {
 				display: block;
 			}
+
+			.loader {
+				border: 4px solid #f3f3f3;
+				border-top: 4px solid #000000;
+				border-radius: 50%;
+				width: 30px;
+				height: 30px;
+				animation: spin 2s linear infinite;
+				margin: auto;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
 		</style>
 	</head>
 	<body>
@@ -87,14 +106,18 @@
 		<div class='pane'>
 			<h2 class="paneTitle">Insider Trades</h2>
 			<div id="insiderTrades" class="cards"></div>
+			<div id="insiderLoader" class="loader"></div>
 		</div>
 		<div class='pane'>
 			<h2 class="paneTitle">News</h2>
 			<div id="news" class="cards"></div>
+			<div id="newsLoader" class="loader"></div>
 		</div>
 		<div class='pane'>
 			<h2 class="paneTitle">Financial Results</h2>
 			<div id="financials" class='cards'></div>
+			<div id="financialsLoader" class="loader"></div>
+
 		</div>
 	</body>
 	<script>
@@ -151,7 +174,7 @@
 		}
 		function getFinancials() {
 		  // API call
-		  fetch('http://localhost:2100/api/financials/latest', {
+		  fetch('https://vikhed.in/api/financials/latest', {
 		      method: 'POST'
 		  })
 		  .then(response => response.json())
